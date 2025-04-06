@@ -1,0 +1,1 @@
+https://mirror.accum.se/mirror/openeuler.org/openEuler-20.03-LTS/ISO/x86_64/
