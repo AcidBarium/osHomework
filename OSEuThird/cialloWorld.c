@@ -1,5 +1,6 @@
 #include <pthread.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 void *worker(void *arg)
 {
@@ -14,12 +15,12 @@ int main(int argc, char *argv[])
     if (pthread_create(&tid, NULL, worker, NULL))
     {
         printf("can not create\n");
-        return 1;
+        exit(1);
     }
 
     printf("main waiting for thread\n");
 
     pthread_join(tid, NULL);
 
-    return 0;
+    exit(0);
 }
