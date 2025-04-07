@@ -14,12 +14,12 @@ int main(int argc, char *argv[])
     if (pthread_create(&tid, NULL, worker, NULL))
     {
         printf("can not create\n");
-        exit(1);
+        return 1;
     }
 
     printf("main waiting for thread\n");
 
     pthread_join(tid, NULL);
 
-    exit(0);
+    return 0;
 }
