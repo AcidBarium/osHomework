@@ -40,9 +40,9 @@ ssh -T git@github.com
 
 ![alt text](img/5.png)
 
-## 3. 服务器开发环境配置
+## 3. Linux开发环境配置
 
-为进行代码开发，首先在服务器上创建一个新的文件夹，如图所示
+为进行代码开发，首先在Linux上创建一个新的文件夹，如图所示
 
 ![alt text](img/6.png)
 
@@ -55,7 +55,7 @@ sudo yum install -y git
 ![alt text](img/7.png)
 
 
-通过 Git 克隆仓库到本地服务器：
+通过 Git 克隆仓库到Linux：
 
 ```
 git clone git@github.com:AcidBarium/osHomework.git
