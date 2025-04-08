@@ -57,7 +57,7 @@ sudo yum install -y git
 
 通过 Git 克隆仓库到Linux：
 
-```
+```bash
 git clone git@github.com:AcidBarium/osHomework.git
 ```
 
