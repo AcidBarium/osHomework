@@ -55,7 +55,7 @@ gcc -o nosync-ex nosync-ex.c -lpthread
 
 运行结果如下图所示
 
-![alt text](image.png)
+![alt text](./img/image.png)
 
 由于这段代码有多线程对全局变量 sum 的竞态条件，导致结果不正确。
 
@@ -110,7 +110,7 @@ gcc -o mutex-ex mutex-ex.c -lpthread
 
 运行结果如下图所示
 
-![alt text](image-1.png)
+![alt text](./img/image-1.png)
 
 这段代码用互斥锁保证了多线程对 sum 的互斥访问，避免了竞态条件，所以结果正确。
 
@@ -169,7 +169,7 @@ gcc -o sem-ex sem-ex.c -lpthread
 
 运行结果如下图所示
 
-![alt text](image-2.png)
+![alt text](./img/image-2.png)
 
 
 这段代码用信号量实现了对 sum 的互斥访问，避免了竞态条件，所以结果正确。
@@ -281,7 +281,7 @@ gcc -o produceConsum produceConsum.c -lpthread
 
 运行结果如下图所示
 
-![alt text](image-3.png)
+![alt text](./img/image-3.png)
 
 ## 代码阅读
 
