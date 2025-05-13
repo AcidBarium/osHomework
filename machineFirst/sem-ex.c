@@ -5,7 +5,7 @@
 int sum = 0;
 sem_t sem;
 
-void* thread(void*) {
+void* thread(void*arg) {
     int i;
     for (i = 0; i < 1000000; i++) {
         sem_wait(&sem);
