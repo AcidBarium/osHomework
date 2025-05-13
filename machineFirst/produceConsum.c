@@ -37,7 +37,7 @@ void* consumer(void* arg) {
         printf("Consumer consumed an item. Current sum: %d\n", sum);
         pthread_cond_signal(&not_full);
         pthread_mutex_unlock(&mutex);
-        sleep(rand() % 2 + 1);
+        sleep(rand() % 2 + 2);
     }
     return NULL;
 }
