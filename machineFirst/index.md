@@ -474,3 +474,176 @@ int main() {
 
 **代码理解**
 > 由于访问冲突和访问时间问题，输出可能会出现不可预测的结果。例如，两个线程可能都打印 Thread 1，因为它们都读取到了相同的 i 值；如果两个线程都稍微慢一些，有可能都输出2。
+
+
+## 理发师问题
+
+编写代码如下所示
+```c
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <semaphore.h>
+
+#define TOTAL_CUSTOMERS 20  // 
+
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+sem_t customer;
+
+int customers_waiting = 0;
+int total_customers = TOTAL_CUSTOMERS;
+
+void* barber(void* arg) {
+    while (1) {
+        sem_wait(&customer);  // 没顾客就阻塞
+        pthread_mutex_lock(&mutex);
+
+        customers_waiting--;
+        printf("Barber: Cutting hair... Customers waiting: %d\n", customers_waiting);
+        total_customers--;
+
+        pthread_mutex_unlock(&mutex);
+
+        sleep(rand() % 2 + 1);  // 理发时间
+
+        if (total_customers == 0) {
+            printf("Barber: All customers done, going to sleep.\n");
+            break;
+        }
+    }
+    return NULL;
+}
+
+void* client(void* arg) {
+    pthread_mutex_lock(&mutex);
+    customers_waiting++;
+    printf("Customer arrived! Customers waiting: %d\n", customers_waiting);
+    pthread_mutex_unlock(&mutex);
+
+    sem_post(&customer);  // 通知理发师
+    return NULL;
+}
+
+int main() {
+    pthread_t barber_tid, customer_tids[TOTAL_CUSTOMERS];
+    srand(time(0));
+
+    sem_init(&customer, 0, 0);
+
+    pthread_create(&barber_tid, NULL, barber, NULL);
+
+    for (int i = 0; i < TOTAL_CUSTOMERS; i++) {
+        usleep((rand() % 1500000));  // 顾客随机到店，单位微秒
+        pthread_create(&customer_tids[i], NULL, client, NULL);
+    }
+
+    for (int i = 0; i < TOTAL_CUSTOMERS; i++) {
+        pthread_join(customer_tids[i], NULL);
+    }
+
+    pthread_join(barber_tid, NULL);
+
+    sem_destroy(&customer);
+    return 0;
+}
+```
+
+运行结果如下图所示
+
+![alt text](./img/image5.png)
+
+
+## git 日志
+
+部分git的记录如下所示
+
+```bash
+D:\githubRes\osHomework\machineFirst>git log
+commit 3c45ecde461bfff2d6fb2ac182ecd3e2fbc2adf1 (HEAD -> main, origin/main, origin/HEAD)
+Author: Acidbarium <acidbarium@localhost.localdomain>
+Date:   Tue May 13 21:41:57 2025 +0800
+
+    修改代码
+
+commit c719e63cf36eb5d1d3d3410db764976fc956c6ec
+Author: Acidbarium <acidbarium@163.com>
+Date:   Tue May 13 22:55:21 2025 +0800
+
+    Update barber.c
+
+commit ccf4157a8188e6912036d8380bf4bc6665d1eeaf
+Author: Acidbarium <acidbarium@localhost.localdomain>
+Date:   Tue May 13 21:37:15 2025 +0800
+
+    编译
+
+commit 786c87db168e94caa73608f883543475c59a4dd8
+Author: Acidbarium <acidbarium@163.com>
+Date:   Tue May 13 22:51:10 2025 +0800
+
+    Update barber.c
+
+commit bf25130aa8b3a0f4eaa5a073b97900fadec093ca
+Author: Acidbarium <acidbarium@localhost.localdomain>
+Date:   Tue May 13 21:32:51 2025 +0800
+
+    修改理发师代码
+:...skipping...
+commit 3c45ecde461bfff2d6fb2ac182ecd3e2fbc2adf1 (HEAD -> main, origin/main, origin/HEAD)
+Author: Acidbarium <acidbarium@localhost.localdomain>
+Date:   Tue May 13 21:41:57 2025 +0800
+
+    修改代码
+
+commit c719e63cf36eb5d1d3d3410db764976fc956c6ec
+Author: Acidbarium <acidbarium@163.com>
+Date:   Tue May 13 22:55:21 2025 +0800
+
+    Update barber.c
+
+commit ccf4157a8188e6912036d8380bf4bc6665d1eeaf
+Author: Acidbarium <acidbarium@localhost.localdomain>
+Date:   Tue May 13 21:37:15 2025 +0800
+
+    编译
+
+commit 786c87db168e94caa73608f883543475c59a4dd8
+Author: Acidbarium <acidbarium@163.com>
+Date:   Tue May 13 22:51:10 2025 +0800
+
+    Update barber.c
+
+commit bf25130aa8b3a0f4eaa5a073b97900fadec093ca
+Author: Acidbarium <acidbarium@localhost.localdomain>
+Date:   Tue May 13 21:32:51 2025 +0800
+
+    修改理发师代码
+
+commit 61d71bf044ee64b77257ce2c621dc6df74feb8d4
+Author: Acidbarium <acidbarium@163.com>
+Date:   Tue May 13 22:41:52 2025 +0800
+
+    Create barber.c
+
+commit 962f84955722cc014c12d403d4c2c05bb4a4f3c4
+Author: Acidbarium <acidbarium@163.com>
+Date:   Tue May 13 22:35:04 2025 +0800
+
+    移动代码到code文件夹
+
+commit 960c5f8d88ceb09a484c6811f1abdbd258da339d
+Author: Acidbarium <acidbarium@163.com>
+Date:   Tue May 13 22:32:04 2025 +0800
+
+    Create 第一次上机实验报告_软件2306_20232241110_刘晨旭.pdf
+
+commit 7426b47b7de9bdf4d6107f438dfa03287a38ae32
+Author: Acidbarium <acidbarium@163.com>
+Date:   Tue May 13 22:29:00 2025 +0800
+```
+
+
+### 仓库地址
+
+仓库作业地址为：[github.com_AcidBarium_osHomework](https://github.com/AcidBarium/osHomework)
