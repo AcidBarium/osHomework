@@ -15,17 +15,12 @@ void* thread(void*) {
 
 int main(void) {
     pthread_t tid1, tid2;
-
     pthread_mutex_init(&mutex, NULL);
-
     pthread_create(&tid1, NULL, thread, NULL);
     pthread_create(&tid2, NULL, thread, NULL);
-
     pthread_join(tid1, NULL);
     pthread_join(tid2, NULL);
-
     printf("1000000 + 1000000 = %d\n", sum);
-
     pthread_mutex_destroy(&mutex);
     return 0;
 }
