@@ -37,19 +37,19 @@ void* client(void* arg) {
 }
 
 int main() {
-    pthread_t barber_tid, customer_tids[5];
+    pthread_t barber_tid, customer_tids[40];
     srand(time(0));
 
     sem_init(&customer, 0, 0);
 
     pthread_create(&barber_tid, NULL, barber, NULL);
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 30; i++) {
         sleep(rand() % 3); // 顾客随机到来
         pthread_create(&customer_tids[i], NULL, client, NULL);
     }
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 30; i++) {
         pthread_join(customer_tids[i], NULL);
     }
 
