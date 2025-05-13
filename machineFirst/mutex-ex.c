@@ -4,7 +4,7 @@
 int sum = 0;
 pthread_mutex_t mutex;
 
-void* thread(void*) {
+void* thread(void*arg) {
     int i;
     for (i = 0; i < 1000000; i++) {
         pthread_mutex_lock(&mutex);
