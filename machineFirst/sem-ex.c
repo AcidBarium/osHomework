@@ -14,8 +14,6 @@ void* thread(void*arg) {
     }
 }
 
-// 使用互斥锁
-
 int main(void) {
     pthread_t tid1, tid2;
 
