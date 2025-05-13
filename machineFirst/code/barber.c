@@ -52,7 +52,7 @@ int main() {
     pthread_create(&barber_tid, NULL, barber, NULL);
 
     for (int i = 0; i < TOTAL_CUSTOMERS; i++) {
-        usleep((rand() % 3000000));  // 顾客随机到店，单位微秒
+        usleep((rand() % 1500000));  // 顾客随机到店，单位微秒
         pthread_create(&customer_tids[i], NULL, client, NULL);
     }
 
