@@ -4,8 +4,8 @@
 
 int main(int argc, char *argv[]) {
     int pid;
-    int pipe1[2];
-    int pipe2[2];
+    int pipe1[2];    //父进程写入，子进程读取   1写 0读
+    int pipe2[2];    //子进程写入，父进程读取
 
     int x;
 
@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    pid = fork();
+    pid = fork();     // fork() 返回 0 表示子进程，返回正值表示父进程
     if (pid < 0) {
         perror("failed to create new process");
         exit(EXIT_FAILURE);
@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
         // 子进程=>父进程：子进程通过pipe2[1]写
         // 子进程<=父进程：子进程通过pipe1[0]读
         // 因此，在子进程中将pipe1[1]和pipe2[0]关闭
-        close(pipe1[1]);
+        close(pipe1[1]);     
         close(pipe2[0]);
 
         do {
@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
 
         do {
             write(pipe1[1], &x, sizeof(int));
-            read(pipe2[0], &x, sizeof(int));
+            read(pipe2[0], &x, sizeof(int));        //read会等待 直到子进程写进去
             printf("parent %d read: %d\n", getpid(), x++);
         } while (x <= 9);
 
