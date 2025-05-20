@@ -5,11 +5,11 @@ opts=-g -c
 all: ppipe
 
 ppipe: $(objs)
-		gcc $(objs) -o ppipe
+	gcc $(objs) -o ppipe
 
 ppipe.o: $(srcs)
-		gcc $(opts) $(srcs)
+	gcc $(opts) $(srcs)
 
 clean:
-		rm ppipe *.o
+	rm ppipe *.o
 
