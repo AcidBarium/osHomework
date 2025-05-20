@@ -69,20 +69,20 @@ int main(){
 ### 在有exit的时候
 
 程序运行会按下图所示运行
-![alt text](5aadbdde798560482b828cbd03a8063d.jpeg)
+![alt text](./img/5aadbdde798560482b828cbd03a8063d.jpeg)
 
 从图上可以看出共输出四次，运行结果如下图所示
-![alt text](image.png)
+![alt text](./img/image.png)
 
 ### 在没有exit的时候
 
 程序会按下图所示运行
 
-![alt text](c44881e3028294cdc8fead7cfb6a64b3.jpeg)
+![alt text](./img/c44881e3028294cdc8fead7cfb6a64b3.jpeg)
 
 从图上可以看出共输出六次，运行结果如下图所示
 
-![alt text](image-1.png)
+![alt text](./img/image-1.png)
 
 ## 2、ppipe.c
 
@@ -166,7 +166,7 @@ int main(int argc, char *argv[]) {
 最终，所有管道关闭，程序正常退出。
 
 运行结果如下所示
-![alt text](image-2.png)
+![alt text](./img/image-2.png)
 
 
 
@@ -231,7 +231,7 @@ int main() {
 
 运行结果如下图所示
 
-![alt text](image-3.png)
+![alt text](./img/image-3.png)
 
-![alt text](image-4.png)
+![alt text](./img/image-4.png)
 
