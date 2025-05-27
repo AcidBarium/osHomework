@@ -4,6 +4,7 @@
  * Function : 建立并模拟生产者进程
  */
 #include "ipc.h"
+#include <unistd.h> 
 int main(int argc, char* argv[]) {
     int rate;
     // 可在在命令行第一参数指定一个进程睡眠秒数，以调解进程执行速度
