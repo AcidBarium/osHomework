@@ -4,29 +4,29 @@
  * Function : 建立并模拟生产者进程
  */
 #include "ipc.h"
-#include <unistd.h> 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[])
+{
     int rate;
     // 可在在命令行第一参数指定一个进程睡眠秒数，以调解进程执行速度
     if (argv[1] != NULL)
         rate = atoi(argv[1]);
     else
-        rate = 3;  // 不指定为 3 秒
-                   // 共享内存使用的变量buff_key = 101;//缓冲区任给的键值
-    buff_num = 8;                // 缓冲区任给的长度
-    pput_key = 102;              // 生产者放产品指针的键值
-    pput_num = 1;                // 指针数
-    shm_flg = IPC_CREAT | 0644;  // 共享内存读写权限
+        rate = 3;               // 不指定为 3 秒
+                                // 共享内存使用的变量buff_key = 101;//缓冲区任给的键值
+    buff_num = 8;               // 缓冲区任给的长度
+    pput_key = 102;             // 生产者放产品指针的键值
+    pput_num = 1;               // 指针数
+    shm_flg = IPC_CREAT | 0644; // 共享内存读写权限
     // 获取缓冲区使用的共享内存，buff_ptr 指向缓冲区首地址
-    buff_ptr = (char*)set_shm(buff_key, buff_num, shm_flg);
+    buff_ptr = (char *)set_shm(buff_key, buff_num, shm_flg);
     // 获取生产者放产品位置指针 pput_ptr
-    pput_ptr = (int*)set_shm(pput_key, pput_num, shm_flg);
+    pput_ptr = (int *)set_shm(pput_key, pput_num, shm_flg);
 
     // 信号量使用的变量
-    prod_key = 201;  // 生产者同步信号灯键值
-    pmtx_key = 202;  // 生产者互斥信号灯键值
-    cons_key = 301;  // 消费者同步信号灯键值
-    cmtx_key = 302;  // 消费者互斥信号灯键值
+    prod_key = 201; // 生产者同步信号灯键值
+    pmtx_key = 202; // 生产者互斥信号灯键值
+    cons_key = 301; // 消费者同步信号灯键值
+    cmtx_key = 302; // 消费者互斥信号灯键值
     sem_flg = IPC_CREAT | 0644;
     // 生产者同步信号灯初值设为缓冲区最大可用量
     sem_val = buff_num;
@@ -41,7 +41,8 @@ int main(int argc, char* argv[]) {
     // 获取生产者互斥信号灯，引用标识存 pmtx_sem
     pmtx_sem = set_sem(pmtx_key, sem_val, sem_flg);
     // 循环执行模拟生产者不断放产品
-    while (1) {
+    while (1)
+    {
         // 如果缓冲区满则生产者阻塞
         down(prod_sem);
         // 如果另一生产者正在放产品，本生产者阻塞
