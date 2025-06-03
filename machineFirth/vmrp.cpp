@@ -42,7 +42,7 @@ void Replace::Report(void)
     cout << "Rate of page faults = "
          << 100 * (float)FaultNumber / (float)PageNumber << "%" << endl;
 }
-void Replace::Lru(void)
+void Replace::Lru(void) // 最近最久未使用的页面被淘汰。
 {
     int i, j, k, l, next;
     InitSpace("LRU");
@@ -93,7 +93,7 @@ void Replace::Lru(void)
     // 分析统计选择的算法对于当前引用的页面走向的性能
     Report();
 }
-void Replace::Fifo(void)
+void Replace::Fifo(void) // 最先进入内存的页面，最先被淘汰。
 {
     int i, j, k, l, next;
     InitSpace("FIFO");
@@ -131,7 +131,7 @@ void Replace::Fifo(void)
     Report();
 }
 
-void Replace::Clock(void)
+void Replace::Clock(void) // 循环扫描，找到 used=false 的页面淘汰，否则把 used 清 0。
 {
     InitSpace("Clock");
     int pointer = 0;                    // 指向下一个要替换的页面
@@ -198,7 +198,7 @@ void Replace::Clock(void)
     Report();
 }
 
-void Replace::Eclock(void)
+void Replace::Eclock(void) // 在 Clock 基础上，考虑 used 和 modified，优先淘汰 used=0, modified=0 的。
 {
     InitSpace("EClock");
     int pointer = 0;                        // 指向下一个要替换的页面
@@ -344,7 +344,7 @@ void Replace::Eclock(void)
     Report();
 }
 
-void Replace::Lfu(void)
+void Replace::Lfu(void) // 淘汰使用频率最少的页面。
 {
     InitSpace("LFU");
     int *frequency = new int[FrameNumber]; // 记录每个页面的使用频率
@@ -412,11 +412,12 @@ void Replace::Lfu(void)
     Report();
 }
 
-void Replace::Mfu(void)
+void Replace::Mfu(void) // 淘汰使用频率最多的页面。
 {
     InitSpace("MFU");
     int *frequency = new int[FrameNumber]; // 记录每个页面的使用频率
     int eliminateIndex = 0;                // 用于记录淘汰页的索引
+    int cnt = 0;
 
     for (int i = 0; i < FrameNumber; i++)
     {
@@ -439,14 +440,27 @@ void Replace::Mfu(void)
             }
         }
 
-        if (!found)
+        if (!found && cnt < FrameNumber)
+        {
+            FaultNumber++;
+            PageFrames[cnt] = next;
+            frequency[cnt] = 0; // 新页面初始使用频率为0
+
+            if (PageFrames[cnt] != -1)
+            {
+                EliminatePage[eliminateIndex++] = PageFrames[cnt];
+            }
+
+            cnt++;
+        }
+        else if (!found)
         {
             FaultNumber++;
             // 找到使用频率最高的页面进行替换
             int maxFreqIndex = 0;
             for (int i = 1; i < FrameNumber; i++)
             {
-                if (frequency[i] > frequency[maxFreqIndex])
+                if (frequency[i] >= frequency[maxFreqIndex])
                 {
                     maxFreqIndex = i;
                 }
@@ -460,7 +474,7 @@ void Replace::Mfu(void)
 
             // 进行页面替换
             PageFrames[maxFreqIndex] = next;
-            frequency[maxFreqIndex] = 1; // 新页面初始使用频率为1
+            frequency[maxFreqIndex] = 0; // 新页面初始使用频率为0
         }
 
         // 报告当前实存中页号
